@@ -8,7 +8,7 @@ Build Status Branch Master
 
 Configurações de DB
 ```
-Create "books" schema in mysql in file application.properties
+Create "books" schema in mysql -> change configs in file application.properties
 ```
 
 Run Application

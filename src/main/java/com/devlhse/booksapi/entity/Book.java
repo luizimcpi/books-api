@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "book")
+@Table(name = "tb_book")
 public class Book implements Serializable {
 
     private static final long serialVersionUID = 6313755276785961044L;
@@ -46,7 +46,7 @@ public class Book implements Serializable {
         this.description = description;
     }
 
-    @Column(name = "ISBN", nullable = false)
+    @Column(name = "isbn", nullable = false)
     public String getISBN() {
         return ISBN;
     }

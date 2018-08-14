@@ -56,7 +56,7 @@ public class BookControllerTest {
                 .andExpect(jsonPath("$.data.id").value(VALID_BOOK_ID))
                 .andExpect(jsonPath("$.data.title").value(VALID_BOOK_TITLE))
                 .andExpect(jsonPath("$.data.description").value(VALID_BOOK_DESCRIPTION))
-                .andExpect(jsonPath("$.data.isbn").value(VALID_BOOK_ISBN))
+                .andExpect(jsonPath("$.data.ISBN").value(VALID_BOOK_ISBN))
                 .andExpect(jsonPath("$.data.language").value(VALID_BOOK_LANGUAGE))
                 .andExpect(jsonPath("$.errors").isEmpty());
     }

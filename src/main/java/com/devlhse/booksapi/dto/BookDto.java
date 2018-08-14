@@ -1,5 +1,7 @@
 package com.devlhse.booksapi.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotEmpty;
 
 public class BookDto {
@@ -39,6 +41,7 @@ public class BookDto {
         this.description = description;
     }
 
+    @JsonProperty("ISBN")
     @NotEmpty(message = "ISBN can´t be empty.")
     public String getISBN() {
         return ISBN;

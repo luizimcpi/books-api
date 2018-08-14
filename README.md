@@ -3,7 +3,7 @@ Books CRUD API using SpringBoot, JPA, H2 DB
 
 Build Status Branch Master
 
-[![Build Status](https://travis-ci.org/luizimcpi/ecommerce-api.svg?branch=master)](https://travis-ci.org/luizimcpi/ecommerce-api)
+[![Build Status](https://travis-ci.org/luizimcpi/books-api.svg?branch=master)](https://travis-ci.org/luizimcpi/books-api)
 
 
 Configurações de DB

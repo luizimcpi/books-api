@@ -1,8 +1,10 @@
 package com.devlhse.booksapi.service;
 
 import com.devlhse.booksapi.dto.BookDto;
+import com.devlhse.booksapi.dto.BookListResponseDto;
 import com.devlhse.booksapi.entity.Book;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
@@ -47,4 +49,9 @@ public interface BookService {
      */
     void validateFields(BookDto bookDto);
 
+    /**
+     * get books.
+     *
+     */
+    BookListResponseDto getAllBooks();
 }

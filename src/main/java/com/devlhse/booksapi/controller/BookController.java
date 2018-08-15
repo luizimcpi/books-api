@@ -1,6 +1,7 @@
 package com.devlhse.booksapi.controller;
 
 import com.devlhse.booksapi.dto.BookDto;
+import com.devlhse.booksapi.dto.BookListResponseDto;
 import com.devlhse.booksapi.entity.Book;
 import com.devlhse.booksapi.exception.EntityNotFoundException;
 import com.devlhse.booksapi.exception.FieldEmptyException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -45,5 +47,10 @@ public class BookController {
         }
 
         return ResponseEntity.ok(bookService.entityToDtoConverter(book.get()));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BookListResponseDto> findAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 }

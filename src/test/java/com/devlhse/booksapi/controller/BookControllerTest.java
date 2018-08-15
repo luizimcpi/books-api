@@ -19,6 +19,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Optional;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 public class BookControllerTest {
 
-    private static final String BASE_URL = "/books";
+    private static final String BASE_URL = "/books/";
     private static final Long VALID_BOOK_ID = 1L;
     private static final String VALID_BOOK_TITLE = "Book Title Example";
     private static final String VALID_BOOK_DESCRIPTION = "Book description example";
@@ -53,12 +55,20 @@ public class BookControllerTest {
         mvc.perform(MockMvcRequestBuilders.post(BASE_URL).content(this.getValidJsonPostRequest())
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.data.id").value(VALID_BOOK_ID))
-                .andExpect(jsonPath("$.data.title").value(VALID_BOOK_TITLE))
-                .andExpect(jsonPath("$.data.description").value(VALID_BOOK_DESCRIPTION))
-                .andExpect(jsonPath("$.data.ISBN").value(VALID_BOOK_ISBN))
-                .andExpect(jsonPath("$.data.language").value(VALID_BOOK_LANGUAGE))
-                .andExpect(jsonPath("$.errors").isEmpty());
+                .andExpect(jsonPath("$.id").value(VALID_BOOK_ID))
+                .andExpect(jsonPath("$.title").value(VALID_BOOK_TITLE))
+                .andExpect(jsonPath("$.description").value(VALID_BOOK_DESCRIPTION))
+                .andExpect(jsonPath("$.ISBN").value(VALID_BOOK_ISBN))
+                .andExpect(jsonPath("$.language").value(VALID_BOOK_LANGUAGE));
+    }
+
+    @Test
+    public void testGetProductById() throws Exception {
+        BDDMockito.given(this.bookService.findById(Mockito.anyLong())).willReturn(Optional.of(new Book()));
+
+        mvc.perform(MockMvcRequestBuilders.get(BASE_URL + VALID_BOOK_ID)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     private BookDto getReturnedDto() {

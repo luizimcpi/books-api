@@ -9,7 +9,7 @@ public class BookDto {
     private Long id;
     private String title;
     private String description;
-    private String ISBN;
+    private String isbn;
     private String language;
 
     public BookDto() {
@@ -43,12 +43,12 @@ public class BookDto {
 
     @JsonProperty("ISBN")
     @NotEmpty(message = "ISBN can´t be empty.")
-    public String getISBN() {
-        return ISBN;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     @NotEmpty(message = "Language can´t be empty.")
@@ -66,7 +66,7 @@ public class BookDto {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", ISBN='" + ISBN + '\'' +
+                ", ISBN='" + isbn + '\'' +
                 ", language='" + language + '\'' +
                 '}';
     }

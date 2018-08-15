@@ -11,7 +11,7 @@ public class BookConversorComponent {
         Book book = new Book();
         book.setTitle(bookDto.getTitle());
         book.setDescription(bookDto.getDescription());
-        book.setISBN(bookDto.getISBN());
+        book.setIsbn(bookDto.getIsbn());
         book.setLanguage(bookDto.getLanguage());
         return book;
     }
@@ -21,7 +21,7 @@ public class BookConversorComponent {
         bookDto.setId(book.getId());
         bookDto.setTitle(book.getTitle());
         bookDto.setDescription(book.getDescription());
-        bookDto.setISBN(book.getISBN());
+        bookDto.setIsbn(book.getIsbn());
         bookDto.setLanguage(book.getLanguage());
         return bookDto;
     }

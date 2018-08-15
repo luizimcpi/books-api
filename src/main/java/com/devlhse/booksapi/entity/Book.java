@@ -12,7 +12,7 @@ public class Book implements Serializable {
     private Long id;
     private String title;
     private String description;
-    private String ISBN;
+    private String isbn;
     private String language;
 
     public Book() {
@@ -47,12 +47,12 @@ public class Book implements Serializable {
     }
 
     @Column(name = "isbn", nullable = false)
-    public String getISBN() {
-        return ISBN;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     @Column(name = "language", nullable = false)

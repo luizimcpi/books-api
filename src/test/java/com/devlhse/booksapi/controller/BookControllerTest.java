@@ -66,7 +66,7 @@ public class BookControllerTest {
         bookDto.setId(VALID_BOOK_ID);
         bookDto.setTitle(VALID_BOOK_TITLE);
         bookDto.setDescription(VALID_BOOK_DESCRIPTION);
-        bookDto.setISBN(VALID_BOOK_ISBN);
+        bookDto.setIsbn(VALID_BOOK_ISBN);
         bookDto.setLanguage(VALID_BOOK_LANGUAGE);
         return bookDto;
     }
@@ -76,7 +76,7 @@ public class BookControllerTest {
         book.setId(VALID_BOOK_ID);
         book.setTitle(VALID_BOOK_TITLE);
         book.setDescription(VALID_BOOK_DESCRIPTION);
-        book.setISBN(VALID_BOOK_ISBN);
+        book.setIsbn(VALID_BOOK_ISBN);
         book.setLanguage(VALID_BOOK_LANGUAGE);
         return book;
     }
@@ -86,7 +86,7 @@ public class BookControllerTest {
         bookDto.setId(null);
         bookDto.setTitle(VALID_BOOK_TITLE);
         bookDto.setDescription(VALID_BOOK_DESCRIPTION);
-        bookDto.setISBN(VALID_BOOK_ISBN);
+        bookDto.setIsbn(VALID_BOOK_ISBN);
         bookDto.setLanguage(VALID_BOOK_LANGUAGE);
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(bookDto);

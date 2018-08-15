@@ -3,10 +3,13 @@ package com.devlhse.booksapi.service.impl;
 import com.devlhse.booksapi.component.BookConversorComponent;
 import com.devlhse.booksapi.dto.BookDto;
 import com.devlhse.booksapi.entity.Book;
+import com.devlhse.booksapi.exception.FieldEmptyException;
 import com.devlhse.booksapi.repository.BookRepository;
 import com.devlhse.booksapi.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -33,5 +36,19 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto entityToDtoConverter(Book book) {
         return bookConversorComponent.entityToDtoConverter(book);
+    }
+
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        return bookRepository.findById(id);
+    }
+
+    @Override
+    public void validateFields(BookDto bookDto) {
+        if(bookDto.getTitle() == null || bookDto.getTitle().isEmpty()){ throw new FieldEmptyException("title can not be empty");}
+        if(bookDto.getDescription() == null || bookDto.getDescription().isEmpty()){ throw new FieldEmptyException("description can not be empty");}
+        if(bookDto.getIsbn() == null || bookDto.getIsbn().isEmpty()){ throw new FieldEmptyException("ISBN can not be empty");}
+        if(bookDto.getLanguage() == null || bookDto.getLanguage().isEmpty()){ throw new FieldEmptyException("language can not be empty");}
     }
 }

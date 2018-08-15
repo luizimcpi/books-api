@@ -3,6 +3,8 @@ package com.devlhse.booksapi.service;
 import com.devlhse.booksapi.dto.BookDto;
 import com.devlhse.booksapi.entity.Book;
 
+import java.util.Optional;
+
 public interface BookService {
 
 
@@ -29,5 +31,20 @@ public interface BookService {
      * @return bookDto
      */
     BookDto entityToDtoConverter(Book book);
+
+    /**
+     * Find a book by ID.
+     *
+     * @param id
+     * @return Optional<Book>
+     */
+    Optional<Book> findById(Long id);
+
+    /**
+     * Validate fields.
+     *
+     * @param bookDto
+     */
+    void validateFields(BookDto bookDto);
 
 }

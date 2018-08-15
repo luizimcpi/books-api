@@ -1,27 +1,25 @@
 package com.devlhse.booksapi.controller;
 
 import com.devlhse.booksapi.dto.BookDto;
-import com.devlhse.booksapi.dto.Response;
 import com.devlhse.booksapi.entity.Book;
+import com.devlhse.booksapi.exception.EntityNotFoundException;
+import com.devlhse.booksapi.exception.FieldEmptyException;
 import com.devlhse.booksapi.service.BookService;
 import com.devlhse.booksapi.service.impl.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/books")
 public class BookController {
-
 
     private final BookService bookService;
 
@@ -31,18 +29,21 @@ public class BookController {
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Response<BookDto>> create(@Valid @RequestBody BookDto bookDto, BindingResult result) throws URISyntaxException {
-        Response<BookDto> response = new Response<>();
+    public ResponseEntity<BookDto> create(@Valid @RequestBody BookDto bookDto, BindingResult result) throws URISyntaxException, FieldEmptyException {
+        bookService.validateFields(bookDto);
         Book book = bookService.dtoToEntityConverter(bookDto);
+        this.bookService.create(book);
+        return ResponseEntity.created(new URI("/books")).body(bookService.entityToDtoConverter(book));
+    }
 
-        if (result.hasErrors()) {
-            result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
-            return ResponseEntity.badRequest().body(response);
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BookDto> findBookById(@PathVariable("id") Long id) throws EntityNotFoundException {
+        Optional<Book> book = this.bookService.findById(id);
+
+        if (!book.isPresent()) {
+            throw new EntityNotFoundException("Book can not found by id.");
         }
 
-        this.bookService.create(book);
-
-        response.setData(bookService.entityToDtoConverter(book));
-        return ResponseEntity.created(new URI("/books")).body(response);
+        return ResponseEntity.ok(bookService.entityToDtoConverter(book.get()));
     }
 }

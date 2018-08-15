@@ -34,7 +34,7 @@ public class BookListComponent {
 
 }
 
-public static final String TAG_PARAGRAPH = "p";
+//  public static final String TAG_PARAGRAPH = "p";
 //
 //	public static void main(String[] args) throws IOException {
 //		Document mainDoc = Jsoup.connect("https://kotlinlang.org/docs/books.html").get();

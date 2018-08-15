@@ -1,15 +1,19 @@
 package com.devlhse.booksapi.service.impl;
 
 import com.devlhse.booksapi.component.BookConversorComponent;
+import com.devlhse.booksapi.component.BookListComponent;
 import com.devlhse.booksapi.dto.BookDto;
 import com.devlhse.booksapi.dto.BookListResponseDto;
 import com.devlhse.booksapi.entity.Book;
 import com.devlhse.booksapi.exception.FieldEmptyException;
 import com.devlhse.booksapi.repository.BookRepository;
 import com.devlhse.booksapi.service.BookService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +23,17 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookConversorComponent bookConversorComponent;
+    private final BookListComponent bookListComponent;
+
+    private static final Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
 
     @Autowired
-    public BookServiceImpl(final BookRepository bookRepository, final BookConversorComponent bookConversorComponent) {
+    public BookServiceImpl(final BookRepository bookRepository,
+                           final BookConversorComponent bookConversorComponent,
+                           final BookListComponent bookListComponent) {
         this.bookRepository = bookRepository;
         this.bookConversorComponent = bookConversorComponent;
+        this.bookListComponent = bookListComponent;
     }
 
     @Override
@@ -65,6 +75,11 @@ public class BookServiceImpl implements BookService {
             }
         }
 
+        try {
+            booksResponse.addAll(bookListComponent.getBooksFromUrl());
+        }catch (Exception e){
+            log.error("Something wrong occured at BookListComponent.getBooksFromUrl");
+        }
         BookListResponseDto bookListResponseDto = new BookListResponseDto();
         bookListResponseDto.setNumberBooks(booksResponse.size());
         bookListResponseDto.setBooks(booksResponse);

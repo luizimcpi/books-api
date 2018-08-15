@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class BookControllerTest {
+public class BookControllerTests {
 
     private static final String BASE_URL = "/books/";
     private static final Long VALID_BOOK_ID = 1L;

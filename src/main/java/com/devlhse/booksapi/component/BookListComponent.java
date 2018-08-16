@@ -45,7 +45,7 @@ public class BookListComponent {
     private void getNextElements(Element h2, StringBuilder description, BookDto bookDto) throws IOException {
         Element mainNode = h2.nextElementSibling();
         if (mainNode != null && TAG_PARAGRAPH.equalsIgnoreCase(mainNode.nodeName())) {
-            description.append(mainNode.text()).append("\n");
+            description.append(mainNode.text()).append(System.lineSeparator());
             getNextElements(mainNode, description, bookDto);
         }else if(mainNode != null && mainNode.nodeName() != "h2"){
             if(mainNode.getElementsByClass("event-lang").text() != null && !mainNode.getElementsByClass("event-lang").text().isEmpty()){
@@ -64,8 +64,8 @@ public class BookListComponent {
     private static String getBookIsbn(String absHref) {
         String isbn = "Unavailable";
         try {
-            URL oracle = new URL(absHref);
-            BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+            URL url = new URL(absHref);
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {

@@ -7,16 +7,21 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Component
 public class BookListComponent {
 
     private static final String TAG_PARAGRAPH = "p";
 
-    public static List<BookDto> getBooksFromUrl(Long lastId) throws IOException {
+    public List<BookDto> getBooksFromUrl(Long lastId) throws IOException {
         List<BookDto> books = new ArrayList<>();
         BookDto bookDto = null;
         StringBuilder description = null;
@@ -30,13 +35,15 @@ public class BookListComponent {
 			bookDto.setTitle(h2.text());
 			getNextElements(h2, description, bookDto);
 			bookDto.setDescription(description.toString());
+            System.out.println("BookDTO >>>> " + bookDto.toString());
 			books.add(bookDto);
 		}
 
         return books;
     }
 
-    private static void getNextElements(Element h2, StringBuilder description, BookDto bookDto) throws IOException {
+
+    private void getNextElements(Element h2, StringBuilder description, BookDto bookDto) throws IOException {
         Element mainNode = h2.nextElementSibling();
         if (mainNode != null && TAG_PARAGRAPH.equalsIgnoreCase(mainNode.nodeName())) {
             description.append(mainNode.text()).append("\n");
@@ -54,12 +61,28 @@ public class BookListComponent {
         }
     }
 
+
     private static String getBookIsbn(String absHref) {
+        String isbn = "Unavailable";
         try {
 //            Document bookInfosDoc = Jsoup.connect(absHref).get();
-            return "Unavailable";
+
+            URL oracle = new URL(absHref);
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(oracle.openStream()));
+
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                if (inputLine.contains("ISBN")) {
+                    isbn = inputLine;
+//                    System.out.println("linha com ISBN >>>>> " + inputLine);
+                    break;
+                }
+            }
+            in.close();
+            return isbn;
         } catch (Exception e) {
-            return "Unavailable Exception";
+            return isbn;
         }
 
     }

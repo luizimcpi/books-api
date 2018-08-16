@@ -13,19 +13,19 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 @Component
 public class BookListComponent {
 
     private static final String TAG_PARAGRAPH = "p";
+    private static final String WHITE_SPACE = " ";
+    private static final String KOTLIN_BOOKS_URL = "https://kotlinlang.org/docs/books.html";
 
     public List<BookDto> getBooksFromUrl(Long lastId) throws IOException {
         List<BookDto> books = new ArrayList<>();
         BookDto bookDto = null;
         StringBuilder description = null;
-        Document mainDoc = Jsoup.connect("https://kotlinlang.org/docs/books.html").get();
+        Document mainDoc = Jsoup.connect(KOTLIN_BOOKS_URL).get();
 		Elements titles = mainDoc.select("h2");
 
 		for (Element h2 : titles){
@@ -35,7 +35,6 @@ public class BookListComponent {
 			bookDto.setTitle(h2.text());
 			getNextElements(h2, description, bookDto);
 			bookDto.setDescription(description.toString());
-            System.out.println("BookDTO >>>> " + bookDto.toString());
 			books.add(bookDto);
 		}
 
@@ -65,17 +64,13 @@ public class BookListComponent {
     private static String getBookIsbn(String absHref) {
         String isbn = "Unavailable";
         try {
-//            Document bookInfosDoc = Jsoup.connect(absHref).get();
-
             URL oracle = new URL(absHref);
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(oracle.openStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 if (inputLine.contains("ISBN")) {
-                    isbn = inputLine;
-//                    System.out.println("linha com ISBN >>>>> " + inputLine);
+                    isbn = formatIsbnNumber(inputLine);
                     break;
                 }
             }
@@ -85,6 +80,12 @@ public class BookListComponent {
             return isbn;
         }
 
+    }
+
+    public static String formatIsbnNumber(String html) {
+        String isbn = Jsoup.parse(html).text();
+        String[] isbnArray = isbn.split(WHITE_SPACE);
+        return isbnArray[1];
     }
 
 }

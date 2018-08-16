@@ -13,7 +13,7 @@ public class GlobalExceptionControllerTests {
     private Exception e;
 
     @InjectMocks
-    GlobalExceptionController globalExceptionController;
+    private GlobalExceptionController globalExceptionController;
 
     @Before
     public void setUp(){

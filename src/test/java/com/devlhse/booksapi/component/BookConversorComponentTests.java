@@ -1,22 +1,15 @@
-package com.devlhse.booksapi.service;
+package com.devlhse.booksapi.component;
 
-
+import com.devlhse.booksapi.dto.BookDto;
 import com.devlhse.booksapi.entity.Book;
-import com.devlhse.booksapi.repository.BookRepository;
-import com.devlhse.booksapi.service.impl.BookServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Optional;
-
-import static org.mockito.Mockito.when;
-
 @RunWith(MockitoJUnitRunner.class)
-public class BookServiceTests {
+public class BookConversorComponentTests {
 
     private static final Long VALID_BOOK_ID = 1L;
     private static final String VALID_BOOK_TITLE = "Book Title Example";
@@ -24,26 +17,27 @@ public class BookServiceTests {
     private static final String VALID_BOOK_ISBN = "9781617293290";
     private static final String VALID_BOOK_LANGUAGE = "BR";
 
-
-    @Mock
-    private BookRepository bookRepository;
-
     @InjectMocks
-    private BookServiceImpl bookService;
-
+    private BookConversorComponent bookConversorComponent;
 
     @Test
-    public void shouldCreateBookWithSuccessWhenAllFieldsAreNotEmpty(){
-        Book book = getBookEntity();
-        when(bookRepository.save(book)).thenReturn(book);
-        Assert.assertNotNull(bookService.create(book));
+    public void shouldConvertBookDtoWithSuccess() {
+        Assert.assertNotNull(bookConversorComponent.dtoToEntityConverter(getBookDto()));
     }
 
     @Test
-    public void shouldFindBookByIdWithSuccessWhenIdExists(){
-        Optional<Book> book = Optional.ofNullable(getBookEntity());
-        when(bookRepository.findById(VALID_BOOK_ID)).thenReturn(book);
-        Assert.assertNotNull(bookService.findById(VALID_BOOK_ID));
+    public void shouldConvertEntityBookWithSuccess() {
+        Assert.assertNotNull(bookConversorComponent.entityToDtoConverter(getBookEntity()));
+    }
+
+    private BookDto getBookDto() {
+        BookDto bookDto = new BookDto();
+        bookDto.setId(VALID_BOOK_ID);
+        bookDto.setTitle(VALID_BOOK_TITLE);
+        bookDto.setDescription(VALID_BOOK_DESCRIPTION);
+        bookDto.setIsbn(VALID_BOOK_ISBN);
+        bookDto.setLanguage(VALID_BOOK_LANGUAGE);
+        return bookDto;
     }
 
     private Book getBookEntity() {

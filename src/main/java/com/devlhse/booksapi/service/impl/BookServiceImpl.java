@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -69,14 +68,16 @@ public class BookServiceImpl implements BookService {
     public BookListResponseDto getAllBooks() {
         List<Book> books = bookRepository.findAll();
         List<BookDto> booksResponse = new ArrayList<>();
+        Long lastId = 0L;
         if(books != null && !books.isEmpty()){
             for (Book book : books) {
                 booksResponse.add(this.entityToDtoConverter(book));
             }
+            lastId = books.get(books.size()-1).getId();
         }
 
         try {
-            booksResponse.addAll(bookListComponent.getBooksFromUrl());
+            booksResponse.addAll(bookListComponent.getBooksFromUrl(lastId));
         }catch (Exception e){
             log.error("Something wrong occured at BookListComponent.getBooksFromUrl");
         }

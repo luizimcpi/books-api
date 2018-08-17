@@ -24,8 +24,6 @@ public class BookServiceImpl implements BookService {
     private final BookConversorComponent bookConversorComponent;
     private final BookListComponent bookListComponent;
 
-    private static final Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
-
     @Autowired
     public BookServiceImpl(final BookRepository bookRepository,
                            final BookConversorComponent bookConversorComponent,
@@ -68,18 +66,10 @@ public class BookServiceImpl implements BookService {
     public BookListResponseDto getAllBooks() {
         List<Book> books = bookRepository.findAll();
         List<BookDto> booksResponse = new ArrayList<>();
-        Long lastId = 0L;
         if(books != null && !books.isEmpty()){
             for (Book book : books) {
                 booksResponse.add(this.entityToDtoConverter(book));
             }
-            lastId = books.get(books.size()-1).getId();
-        }
-
-        try {
-            booksResponse.addAll(bookListComponent.getBooksFromUrl(lastId));
-        }catch (Exception e){
-            log.error("Something wrong occured at BookListComponent.getBooksFromUrl");
         }
         BookListResponseDto bookListResponseDto = new BookListResponseDto();
         bookListResponseDto.setNumberBooks(booksResponse.size());

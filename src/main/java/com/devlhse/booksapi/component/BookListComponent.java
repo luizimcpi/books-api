@@ -1,10 +1,12 @@
 package com.devlhse.booksapi.component;
 
-import com.devlhse.booksapi.dto.BookDto;
+import com.devlhse.booksapi.entity.Book;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -20,43 +22,46 @@ public class BookListComponent {
     private static final String TAG_PARAGRAPH = "p";
     private static final String WHITE_SPACE = " ";
     private static final String KOTLIN_BOOKS_URL = "https://kotlinlang.org/docs/books.html";
+    private static final Logger log = LoggerFactory.getLogger(BookListComponent.class);
 
-    public List<BookDto> getBooksFromUrl(Long lastId) throws IOException {
-        List<BookDto> books = new ArrayList<>();
-        BookDto bookDto = null;
+    public List<Book> getBooksFromUrl(Long lastId) throws IOException {
+        log.info("Iniciando busca de livros no site...");
+        List<Book> books = new ArrayList<>();
+        Book book = null;
         StringBuilder description = null;
         Document mainDoc = Jsoup.connect(KOTLIN_BOOKS_URL).get();
 		Elements titles = mainDoc.select("h2");
 
 		for (Element h2 : titles){
-		    bookDto = new BookDto();
+		    book = new Book();
 		    description = new StringBuilder();
-		    bookDto.setId(++lastId);
-			bookDto.setTitle(h2.text());
-			getNextElements(h2, description, bookDto);
-			bookDto.setDescription(description.toString());
-			books.add(bookDto);
+            book.setId(++lastId);
+            book.setTitle(h2.text());
+			getNextElements(h2, description, book);
+            book.setDescription(description.toString());
+            log.info("Livro: "+ book.getId() +" e suas informações foram preenchidas...");
+			books.add(book);
 		}
 
         return books;
     }
 
 
-    private void getNextElements(Element h2, StringBuilder description, BookDto bookDto) throws IOException {
+    private void getNextElements(Element h2, StringBuilder description, Book book) throws IOException {
         Element mainNode = h2.nextElementSibling();
         if (mainNode != null && TAG_PARAGRAPH.equalsIgnoreCase(mainNode.nodeName())) {
             description.append(mainNode.text()).append(System.lineSeparator());
-            getNextElements(mainNode, description, bookDto);
+            getNextElements(mainNode, description, book);
         }else if(mainNode != null && mainNode.nodeName() != "h2"){
             if(mainNode.getElementsByClass("event-lang").text() != null && !mainNode.getElementsByClass("event-lang").text().isEmpty()){
-                bookDto.setLanguage(mainNode.getElementsByClass("event-lang").text());
+                book.setLanguage(mainNode.getElementsByClass("event-lang").text());
             }
             if(mainNode.select("a").first() != null ){
                 Element link = mainNode.select("a").first();
                 String absHref = link.attr("abs:href");
-                bookDto.setIsbn(getBookIsbn(absHref));
+                book.setIsbn(getBookIsbn(absHref));
             }
-            getNextElements(mainNode, description, bookDto);
+            getNextElements(mainNode, description, book);
         }
     }
 

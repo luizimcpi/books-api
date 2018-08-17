@@ -37,7 +37,8 @@ public class Book implements Serializable {
         this.title = title;
     }
 
-    @Column(name = "description", nullable = false)
+    @Lob
+    @Column(name = "description", length = 1000, nullable = false)
     public String getDescription() {
         return description;
     }

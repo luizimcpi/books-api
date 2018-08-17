@@ -5,21 +5,23 @@ Build Status Branch Master
 
 [![Build Status](https://travis-ci.org/luizimcpi/books-api.svg?branch=master)](https://travis-ci.org/luizimcpi/books-api)
 
-
-Configurações de DB
-```
-Create "books" schema in mysql -> to change configs look file application-prod.properties
-```
-
 Run Application
 ```
 ./gradlew bootRun
 ```
 
-***The application starts at port 8080 but if you want, you can change this configuration setting
-the following property in application-prod.properties
-
+Database Configuration
 ```
+Application use H2 DB to store data when application is running.
+If you need, you can use Mysql to store data, just update file application.properties
+spring.profiles.active=prod
+After that create "books" schema in your mysql -> to change configs look file application-prod.properties
+```
+
+Servlet Container Configurations
+```
+***The application starts at port 8080 but if you want, you can change this configuration setting
+the following property in application-test.properties or application-prod.properties
 server.port=9090
 ```
 
